@@ -1,4 +1,5 @@
 mod utils;
+mod routers;
 use actix_web::{App, HttpServer};
 
 #[actix_web::main]
@@ -10,6 +11,7 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(|| {
         App::new()
+            .configure(routers::general_router::config_general_routes)
     })
     .bind((host, port.clone()))?
     .run()
