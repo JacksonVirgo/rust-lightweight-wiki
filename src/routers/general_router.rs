@@ -4,14 +4,12 @@ use crate::utils::files;
 
 #[get("/")]
 async fn load_main_page() -> impl Responder {
-    match files::load_file("./wiki/main_page.md") {
-        Ok(file) => {
-            return HttpResponse::Ok().body(file);
-        },
-        Err(_) => {
-            return HttpResponse::NotFound().body("Page not found");
-        }
-    }
+    let file_data = match files::load_file("./wiki/main_page.md") {
+        Ok(file) => file,
+        Err(_) => return HttpResponse::NotFound().body("Page not found"),
+    };
+
+    return HttpResponse::Ok().body(file_data);
 }
 
 pub fn config_general_routes(config: &mut web::ServiceConfig) {
