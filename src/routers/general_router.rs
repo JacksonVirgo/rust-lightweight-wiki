@@ -1,6 +1,6 @@
 use actix_files as fs;
 use actix_web::{Responder, HttpResponse, get, web};
-use crate::utils::files;
+use crate::utils::{files, formatting};
 
 #[get("/")]
 async fn load_main_page() -> impl Responder {
@@ -9,7 +9,8 @@ async fn load_main_page() -> impl Responder {
         Err(_) => return HttpResponse::NotFound().body("Page not found"),
     };
 
-    return HttpResponse::Ok().body(file_data);
+    let formatted_file = formatting::parse_markdown(&file_data);
+    return HttpResponse::Ok().body(formatted_file);
 }
 
 pub fn config_general_routes(config: &mut web::ServiceConfig) {
